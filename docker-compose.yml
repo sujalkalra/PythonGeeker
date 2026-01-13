@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Backend service (Python)
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONPATH=/app
+      - ENVIRONMENT=development
+    depends_on:
+      - db
+
+  # Frontend service (Node.js/React)
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+  # Database service (PostgreSQL)
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=pythongeeker
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
