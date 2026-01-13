@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.content import router as content_router
 
 app = FastAPI(
     title="PythonGeeker API",
@@ -17,3 +18,5 @@ app.add_middleware(
 @app.get("/")
 def health_check():
     return {"status": "ok", "message": "PythonGeeker backend running"}
+
+app.include_router(content_router)
