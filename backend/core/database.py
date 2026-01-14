@@ -12,3 +12,4 @@ db = client[DB_NAME]
 
 modules_collection = db["modules"]
 topics_collection = db["topics"]
+snippets_collection = db["snippets"]
