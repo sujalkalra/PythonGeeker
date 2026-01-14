@@ -1,157 +1,169 @@
-# PythonGeeker
+# 🐍 PythonGeeker
 
-A full-stack web application built with Python backend and modern frontend framework.
+> **Smart way to learn Python in 2026**  
+> Learn Python by *running real code*, not by watching endless videos.
 
-## 🚀 Project Structure
+---
+
+## 🚀 What is PythonGeeker?
+
+**PythonGeeker** is an interactive Python learning platform designed for beginners and intermediate learners who want to learn Python the **smart way** — by reading, modifying, and running real code directly in the browser.
+
+No fluff.  
+No unnecessary theory.  
+Just **clean explanations + runnable Python code**.
+
+---
+
+## 🎯 Key Features (v1)
+
+- 📚 **Structured Roadmap**
+  - 10 well-organized Python modules
+  - Each module contains multiple sub-topics
+- 🧠 **Learn by Doing**
+  - Every topic comes with pre-written Python code
+  - Users can run code instantly and see output
+- 💻 **In-Browser Code Editor**
+  - VS Code-like editor experience
+  - Dark mode by default
+- 🖥️ **Live Console Output**
+  - See `stdout` and errors instantly
+  - Perfect for understanding how code works
+- 🔐 **Secure Code Execution**
+  - Python code runs inside isolated Docker containers
+  - Time and memory limited for safety
+
+---
+
+## 🧩 Platform Architecture
+
+```
+Frontend (Next.js + Tailwind)
+          |
+          | REST API
+          |
+Backend (FastAPI)
+          |
+          | MongoDB (content & metadata)
+          |
+          | Docker Sandbox (Python code execution)
+```
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Next.js** (App Router)
+- **Tailwind CSS**
+- **Monaco Editor** (VS Code editor)
+- **xterm.js** (terminal output)
+- **ShadCN/UI**
+
+### Backend
+- **FastAPI**
+- **Python 3.12**
+- **Docker**
+- **MongoDB**
+
+---
+
+## 📦 Project Structure
 
 ```
 pythongeeker/
-├── frontend/          # Frontend application (React/Next.js)
-├── backend/           # Backend API (Python/FastAPI)
-├── docker/            # Docker configuration files
-├── docker-compose.yml # Docker Compose configuration
-├── README.md          # Project documentation
-└── .gitignore         # Git ignore rules
+│
+├── frontend/                # Next.js frontend
+│   ├── app/
+│   ├── components/
+│   └── styles/
+│
+├── backend/                 # FastAPI backend
+│   ├── main.py
+│   ├── routes/
+│   ├── services/
+│   ├── models/
+│   └── executor/            # Docker-based code runner
+│
+├── docker/
+│   └── python-runner/       # Secure Python execution image
+│
+└── docker-compose.yml
 ```
 
-## 🛠️ Technologies
+---
 
-- **Backend**: Python, FastAPI/Flask, PostgreSQL
-- **Frontend**: React/Next.js, TypeScript, Tailwind CSS
-- **Database**: PostgreSQL
-- **Containerization**: Docker, Docker Compose
-- **Development**: Poetry/pip, npm/yarn
+## 🧪 How Code Execution Works
 
-## 📦 Prerequisites
+1. User clicks **Run Code**
+2. Frontend sends Python code to backend
+3. Backend spins up a temporary Docker container
+4. Code executes inside a sandboxed environment
+5. Output / errors are captured
+6. Container is destroyed after execution
 
-- Docker and Docker Compose
-- Python 3.8+
-- Node.js 14+
+✔️ No internet access  
+✔️ Execution time & memory limits  
+✔️ Fully isolated environment  
 
-## 🚀 Quick Start
+---
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd pythongeeker
-   ```
+## 🧠 Learning Modules (Planned)
 
-2. **Start with Docker Compose**
-   ```bash
-   docker-compose up --build
-   ```
+1. Python Basics  
+2. Control Flow  
+3. Loops & Iterations  
+4. Data Structures  
+5. Functions  
+6. Modules & Packages  
+7. Error Handling  
+8. Object Oriented Programming  
+9. Advanced Python  
+10. Best Practices  
 
-3. **Access the applications**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
-   - API Documentation: http://localhost:8000/docs
+---
 
-## 📁 Development Setup
+## 🗺️ Roadmap
 
-### Backend Development
+### v1 (Current)
+- Core learning platform
+- Interactive code execution
+- Static content (no login)
 
-1. Navigate to backend directory:
-   ```bash
-   cd backend
-   ```
+### v2 (Future)
+- User authentication
+- Progress tracking
+- Challenges & quizzes
+- AI explanations
+- Certificates
 
-2. Set up Python virtual environment:
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Run the development server:
-   ```bash
-   python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
-   ```
-
-### Frontend Development
-
-1. Navigate to frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-## 🐳 Docker Services
-
-- **backend**: Python API service running on port 8000
-- **frontend**: React/Next.js application running on port 3000
-- **db**: PostgreSQL database running on port 5432
-
-## 🔧 Environment Variables
-
-### Backend (.env)
-```
-DATABASE_URL=postgresql://postgres:postgres@db:5432/pythongeeker
-ENVIRONMENT=development
-SECRET_KEY=your-secret-key
-```
-
-### Frontend (.env)
-```
-REACT_APP_API_URL=http://localhost:8000
-```
-
-## 📊 Database
-
-The application uses PostgreSQL with the following default credentials:
-- Database: pythongeeker
-- User: postgres
-- Password: postgres
-- Port: 5432
-
-## 🧪 Testing
-
-Run tests for both backend and frontend:
-
-```bash
-# Backend tests
-cd backend && python -m pytest
-
-# Frontend tests
-cd frontend && npm test
-```
-
-## 📈 Deployment
-
-### Production Build
-
-```bash
-docker-compose -f docker-compose.prod.yml up --build
-```
-
-### Kubernetes (Optional)
-
-See `docker/kubernetes` directory for deployment manifests.
+---
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Contributions are welcome!
+
+- Fork the repo
+- Create a new branch
+- Make your changes
+- Open a Pull Request
+
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License © 2026  
+Built with ❤️ for Python learners
 
-## 🆘 Support
+---
 
-If you have any questions or issues, please open an issue on GitHub or contact the development team.
+## ⭐ Support
+
+If you find **PythonGeeker** useful:
+- ⭐ Star the repository
+- 🐛 Report issues
+- 💡 Suggest features
+
+---
+
+> *Python is best learned by writing and running code — PythonGeeker is built around that philosophy.*
