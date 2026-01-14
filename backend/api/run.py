@@ -2,8 +2,13 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 import subprocess
 import sys
+import os
 
 router = APIRouter(prefix="/api")
+
+# WARNING: Set USE_DOCKER=false only for free-tier deployments where Docker is unavailable.
+# This mode is less secure as it runs code directly on the host machine.
+USE_DOCKER = os.getenv("USE_DOCKER", "true").lower() == "true"
 
 class CodeRequest(BaseModel):
     code: str
@@ -24,21 +29,34 @@ def run_code(payload: CodeRequest):
     full_code = utf8_header + payload.code
 
     try:
-        # Use Docker to execute code securely
-        cmd = [
-            "docker", "run", "--rm", "-i",
-            "--network", "none",
-            "--memory", "128m",
-            "--cpus", "0.5",
-            # Ensure Docker passes UTF-8 environment variable (good practice)
-            "-e", "PYTHONIOENCODING=utf-8", 
-            "python:3.10-slim",
-            "python3"
-        ]
+        if USE_DOCKER:
+            # Use Docker to execute code securely
+            cmd = [
+                "docker", "run", "--rm", "-i",
+                "--network", "none",
+                "--memory", "128m",
+                "--cpus", "0.5",
+                # Ensure Docker passes UTF-8 environment variable (good practice)
+                "-e", "PYTHONIOENCODING=utf-8", 
+                "python:3.10-slim",
+                "python3"
+            ]
+        else:
+            # Fallback: Execute directly using the host's Python interpreter
+            # NOTE: This is insecure for public apps but allows free-tier deployment
+            cmd = [sys.executable, "-c", full_code]
         
         # 2. Execute with explicit encoding handling
         # encoding="utf-8": Encodes input and decodes output as UTF-8
         # errors="replace": Prevents crashing if invalid bytes are encountered
+        # We handle input via pipe for both Docker and direct execution (if using -c, we might need adjustments)
+        
+        # Correction for direct execution:
+        # If running via `python -c code`, we can't easily pipe large code.
+        # Instead, we should use `python -` to read from stdin, which matches Docker's behavior.
+        if not USE_DOCKER:
+             cmd = [sys.executable, "-"]
+
         proc = subprocess.run(
             cmd,
             input=full_code,
@@ -64,7 +82,7 @@ def run_code(payload: CodeRequest):
     except FileNotFoundError:
         return {
             "stdout": "", 
-            "stderr": "Docker not found. Please ensure Docker is installed and running.", 
+            "stderr": "Execution Environment not found. Please check server configuration.", 
             "returncode": -1
         }
     except Exception as e:
