@@ -5,12 +5,9 @@ from api.run import router as run_router
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:3001",
-    "http://localhost:3002",
-]
+# Allow all origins for simplicity in this demo setup.
+# In a real production app, you might want to restrict this to your Vercel domain.
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
