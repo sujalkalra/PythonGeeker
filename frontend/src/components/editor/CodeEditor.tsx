@@ -1,7 +1,10 @@
 "use client";
 
-import Editor, { OnMount, Monaco } from "@monaco-editor/react";
+import Editor, { OnMount, Monaco, loader } from "@monaco-editor/react";
 import { useEffect, useState, useRef } from "react";
+
+// Configure Monaco Loader to use jsDelivr (matching CSP)
+loader.config({ paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs" } });
 
 export interface EditorError {
   startLineNumber: number;
