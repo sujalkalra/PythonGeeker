@@ -2,11 +2,24 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { CodeEditor } from "@/components/editor/CodeEditor";
+import dynamic from "next/dynamic";
 import { Console } from "@/components/editor/Console";
 import { Button } from "@/components/ui/Button";
 import { Play, RotateCcw, Edit2 } from "lucide-react";
 import { motion } from "framer-motion";
+
+// Dynamic import for CodeEditor to avoid SSR issues (Monaco Editor)
+const CodeEditor = dynamic(
+  () => import("@/components/editor/CodeEditor").then((mod) => mod.CodeEditor),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full flex items-center justify-center bg-slate-950 text-slate-500 rounded-lg">
+        Initializing Editor...
+      </div>
+    )
+  }
+);
 
 // Define the shape of the data we get from the backend
 interface BackendTopic {
