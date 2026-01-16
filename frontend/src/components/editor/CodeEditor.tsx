@@ -21,15 +21,20 @@ interface CodeEditorProps {
 
 export function CodeEditor({ code, onChange, readOnly, errors = [] }: CodeEditorProps) {
   const [editorLoaded, setEditorLoaded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<Monaco | null>(null);
   const decorationsRef = useRef<string[]>([]); // Track decorations to clear them later
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     setEditorLoaded(true);
     editorRef.current = editor;
     monacoRef.current = monaco;
-
+    // ... theme setup ...
     monaco.editor.defineTheme("python-geeker-theme", {
       base: "vs-dark",
       inherit: true,
@@ -70,6 +75,14 @@ export function CodeEditor({ code, onChange, readOnly, errors = [] }: CodeEditor
     }
   }, [errors]);
 
+  if (!isMounted) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-slate-950 text-slate-500 rounded-lg border border-slate-800">
+        Initializing Editor...
+      </div>
+    );
+  }
+
   return (
     <div className="h-full w-full overflow-hidden rounded-lg border border-slate-800 bg-slate-950 shadow-inner">
       <Editor
@@ -79,6 +92,11 @@ export function CodeEditor({ code, onChange, readOnly, errors = [] }: CodeEditor
         onChange={onChange}
         theme="vs-dark" // Will be overridden by onMount
         onMount={handleEditorDidMount}
+        loading={
+            <div className="flex items-center justify-center h-full text-slate-500">
+                Loading Monaco Editor...
+            </div>
+        }
         options={{
           readOnly: readOnly,
           minimap: { enabled: false },

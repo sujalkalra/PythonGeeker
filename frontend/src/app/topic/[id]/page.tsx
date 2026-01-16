@@ -2,24 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import dynamic from "next/dynamic";
+import { CodeEditor } from "@/components/editor/CodeEditor";
 import { Console } from "@/components/editor/Console";
 import { Button } from "@/components/ui/Button";
 import { Play, RotateCcw, Edit2 } from "lucide-react";
 import { motion } from "framer-motion";
-
-// Dynamic import for CodeEditor to avoid SSR issues (Monaco Editor)
-const CodeEditor = dynamic(
-  () => import("@/components/editor/CodeEditor").then((mod) => mod.CodeEditor),
-  { 
-    ssr: false,
-    loading: () => (
-      <div className="h-full w-full flex items-center justify-center bg-slate-950 text-slate-500 rounded-lg">
-        Initializing Editor...
-      </div>
-    )
-  }
-);
 
 // Define the shape of the data we get from the backend
 interface BackendTopic {
@@ -170,7 +157,7 @@ export default function TopicPage() {
           transition={{ delay: 0.1 }}
           className="flex flex-1 flex-col lg:w-1/2 min-h-0"
         >
-          <div className="flex-1 relative rounded-lg border border-slate-800 shadow-lg overflow-hidden min-h-0">
+          <div className="flex-1 relative rounded-lg border border-slate-800 shadow-lg overflow-hidden min-h-[400px] lg:min-h-0">
              {/* Edit Overlay/Indicator */}
              <div className="absolute top-2 right-4 z-10 flex items-center space-x-2">
                 <span className={`text-xs font-mono px-2 py-1 rounded ${isEditing ? 'bg-neon-blue/10 text-neon-blue border border-neon-blue/30' : 'bg-slate-800 text-slate-500'}`}>
