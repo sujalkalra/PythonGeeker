@@ -18,3 +18,7 @@ app.add_middleware(
 )
 app.include_router(content_router)
 app.include_router(run_router)
+
+@app.get("/")
+def health_check():
+    return {"status": "ok", "service": "PythonGeeker Backend"}

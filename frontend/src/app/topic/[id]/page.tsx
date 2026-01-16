@@ -33,7 +33,7 @@ export default function TopicPage() {
       
       setIsFetching(true);
       try {
-        const res = await fetch(`http://localhost:8000/api/topic/${params.id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/topic/${params.id}`);
         if (!res.ok) throw new Error("Failed to fetch topic");
         
         const data = await res.json();
@@ -64,7 +64,7 @@ export default function TopicPage() {
     setErrors([]);
 
     try {
-      const response = await fetch("http://localhost:8000/api/run", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/run`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),

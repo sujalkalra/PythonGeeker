@@ -34,7 +34,7 @@ export default function ModulesPage() {
   useEffect(() => {
     async function fetchModules() {
       try {
-        const res = await fetch("http://localhost:8000/api/roadmap");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/roadmap`);
         if (res.ok) {
           const data = await res.json();
           setModules(data);
