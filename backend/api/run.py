@@ -3,12 +3,21 @@ from pydantic import BaseModel
 import subprocess
 import sys
 import os
+import shutil
 
 router = APIRouter(prefix="/api")
 
-# WARNING: Set USE_DOCKER=false only for free-tier deployments where Docker is unavailable.
-# This mode is less secure as it runs code directly on the host machine.
-USE_DOCKER = os.getenv("USE_DOCKER", "true").lower() == "true"
+# CONFIGURATION:
+# We prefer using Docker for security ("true").
+# However, if Docker is not installed (e.g. Render Free Tier), we fallback to local execution.
+USE_DOCKER_ENV = os.getenv("USE_DOCKER", "true").lower() == "true"
+DOCKER_AVAILABLE = shutil.which("docker") is not None
+
+# Final decision: Use Docker only if requested AND available
+USE_DOCKER = USE_DOCKER_ENV and DOCKER_AVAILABLE
+
+if not DOCKER_AVAILABLE and USE_DOCKER_ENV:
+    print("WARNING: Docker not found. Falling back to insecure local execution.")
 
 class CodeRequest(BaseModel):
     code: str
