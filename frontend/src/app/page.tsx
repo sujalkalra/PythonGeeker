@@ -111,7 +111,7 @@ function DeveloperCard() {
           <div className="h-24 w-24 overflow-hidden rounded-full border-2 border-slate-700 shadow-lg md:h-32 md:w-32">
              {/* Replace src with your actual image URL */}
              <img 
-               src="/profile.png" 
+               src="/sujal.jpg" 
                alt="Developer" 
                className="h-full w-full object-cover"
              />
